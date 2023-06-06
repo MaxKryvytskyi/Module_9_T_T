@@ -1,5 +1,3 @@
-import re 
-
 flag_exit = True
 
 # Список контактів.
@@ -12,14 +10,12 @@ def hello(_):
 # Асистент додає дані до книги контактів.
 def add(uzer_input):
     text = uzer_input.split()
-    global contacts
     contacts[text[1].capitalize()] = text[2]
     return f"Контакт {text[1].capitalize()} з номером {text[2]} створений"
 
 # Асистент змінює дані в книзі контактів.
 def change(uzer_input):
     text = uzer_input.split()
-    global contacts
     contacts[text[1].capitalize()] = text[2]
     return f"Номер телефона {text[1].capitalize()} змінений на : {text[2]}"
     
@@ -56,16 +52,18 @@ COMMANDS = {"hello": hello,
 
 # Знаходить команду.
 def handler(uzer_input):
-    uzer_input = re.search("hello|add|change|phone|show all|good bye|close|exit", uzer_input.lower())
-    return COMMANDS[uzer_input.group()]
-
+    text = uzer_input.lower()
+    for keys in COMMANDS.keys():
+        if keys in text:
+            return COMMANDS[keys]
+        
 # Обробка помилок.
 def input_error(func):
     def inner():
         try:
             func()
         except TypeError:
-            print("TypeError") # що повинно статися щоб побачити тебе?
+            print("Такої команди не існує")
             return main()
         except IndexError:
             print('Enter name and phone separated by a space!')
@@ -90,4 +88,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
